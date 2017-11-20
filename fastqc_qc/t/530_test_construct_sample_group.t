@@ -1,0 +1,20 @@
+use Pfizer::FastQC::Utils qw(parseSampleSheet);
+use Pfizer::FastQC::Sample;
+use Pfizer::FastQC::SampleSheet;
+use Pfizer::FastQC::SampleGroup;
+use Test::Simple tests => 1;
+use Carp;
+use Data::Dumper;
+use strict;
+
+my $sample_csv = "/afs/grid.pfizer.com/alds/users/ayyasa/perl/t/SampleSheet.csv"; # "/afs/grid.pfizer.com/alds/projects/btx/fastqc/SampleSheet.csv";
+my $href= parseSampleSheet($sample_csv);
+print Dumper $href;
+my $ss = new Pfizer::FastQC::SampleSheet($sample_csv);
+my $sg = new Pfizer::FastQC::SampleGroup();
+$sg->insert;
+Pfizer::FastQC::Sample->insertSamples($sg, $ss);
+print Dumper $sg;
+print $sg->toHTMLTable, "\n";
+$sg->delete;
+ok(1, 'construct sample group');

@@ -1,0 +1,130 @@
+# User- and aministrator-settable 
+# parameters for FastQC
+
+$VERBOSE = 2;
+$LOG_FH = \*STDOUT;
+$FQ_R_CMD = 'R';
+$FQ_LOGDIR = '/hpc/grid/scratch/tbi/fastqc_dev/logs'; #'/hpc/grid/scratch/tbi/fastqc/logs';
+@FQ_BCL_ROOT_DIRS = (
+    '/hpc/grid/scratch/tbi/fastqc_dev/raw'
+    #'/hpc/grid/wip_cmg_systems-immunology/Molecular_Profiling/NextSeq500_bcl_folder', # PTx NextSeq500
+    #'/hpc/grid/wip_cmg_systems-immunology/Molecular_Profiling/MiniSeq' # PTx MinSeq
+);
+$FQ_BCL_ROOT_DIR = $FQ_BCL_ROOT_DIRS[0];
+# '/hpc/grid/wip_cmg_prec_med/Nucleic_Acid_Group/NextSeq500_bcl_folder';
+# Other, alternative FQ_BCL_ROOT_DIRs are:
+# $FQ_BCL_ROOT_DIR  = '/hpc/grid/scratch/tbi/temp_bcl_root'; # wangv02';
+# $FQ_BCL_ROOT_DIR = '/afs/grid.pfizer.com/alds/projects/dev/fastqc/test-bcl-root';
+# $FQ_BCL_ROOT_DIR = "/hpc/grid/wip_cmg_prec_med/Nucleic_Acid_Group/NextSeq500_bcl_folder/Yings_TREX_tests"; # Theresas_cell_free_tests";
+
+
+%ENV_DEFAULT = ( 
+    FQ_BCL_ROOT_DIR => '/hpc/grid/wip_cmg_prec_med/Nucleic_Acid_Group/NextSeq500_bcl_folder',
+    BCL_NUM_LANES => 4
+    );	     
+
+# Pre-populate default settings
+# and override smaller set of directory-specific settings for each BCL_ROOT
+
+# PTx clinical NextSeq 500: '/hpc/grid/wip_cmg_prec_med/Nucleic_Acid_Group/NextSeq500_bcl_folder';
+my $curr_root = $FQ_BCL_ROOT_DIRS[0];
+$env{$curr_root} = {%ENV_DEFAULT};
+
+# PTx clinical MiniSeq: '/hpc/grid/wip_cmg_prec_med/Nucleic_Acid_Group/MiniSeq'
+$curr_root = $FQ_BCL_ROOT_DIRS[1];
+$env{$curr_root} = {%ENV_DEFAULT};
+$env{$curr_root}->{BCL_NUM_LANES} = 1;
+
+
+# Mail configuration
+$SMTP_SERVER = 'ndhsmtp.amer.pfizer.com';
+$APPLICATION_EMAIL = 'fastqc-do-not-reply@pfizer.com';
+$ADMIN_EMAIL = 'archana.ayyaswamy@pfizer.com';
+$SAMPLESHEET_FILE = 'SampleSheet.csv';
+$SUPPORT_QUEUE = 'AMR-R&D-MRBT BIOINFO APPS';
+$METADATA_FILE = 'metadata.txt';
+
+# Process user config
+$PROCESS_USER = 'SRVGBL-FASTQC';
+$KEYTAB_FILE = $ENV{HOME} . "/$PROCESS_USER.keytab";
+
+# FASTQC html icon templates
+%IMG_SRC = ( FAIL => "/afs/grid.pfizer.com/alds/projects/dev/fastqc/perl/data/fail.src",
+	     PASS => "/afs/grid.pfizer.com/alds/projects/dev/fastqc/perl/data/pass.src",
+	     WARN => "/afs/grid.pfizer.com/alds/projects/dev/fastqc/perl/data/warn.src");
+
+# LSF parameters
+$LSF_DEFAULT_QUEUE = 'general'; 
+$BSUB_HOST_SELECT = "";
+# -m 'amrndhl1295.pfizer.com amrndhl1296.pfizer.com amrndhl1292.pfizer.com amrndhl1228.pfizer.com amrndhl1159.pfizer.com amrndhl1158.pfizer.com amrndhl1157.pfizer.com amrndhl1156.pfizer.com'";
+$BSUB_CMD = "bsub $BSUB_HOST_SELECT -app large -q $LSF_DEFAULT_QUEUE";
+$RAW_FASTQ_FILE_DIR = '/hpc/grid/scratch/tbi/fastqc_dev/raw';#'/hpc/grid/scratch/tbi/fastqc/raw';
+$CLEAN_FASTQ_FILE_DIR = '/hpc/grid/scratch/tbi/fastqc_dev/clean';
+$FQ_TMPDIR = '/hpc/grid/scratch/tbi/fastqc_dev/temp';
+
+# BCL-related parameters
+$BCL_NUM_READS = 2;
+
+# BCL2Fastq parameters
+$DO_READCLEAN_DEFAULT = 'None';
+$B2Q_EXE = './wrap_bcl2fastq.sh'; # '/hpc/grid/omics_data02/apps/bcl2fastq-v2.15.0/bin/bcl2fastq';
+$B2Q_COMMAND = "$BSUB_CMD -K -n 16 $B2Q_EXE";
+$LOADING_THREADS = 4; # 8; # 16;
+$DEMULTX_THREADS = 4; # 8; # 16;
+$PROC_THREADS = 8; # 12; # 24;
+$WRITE_THREADS = 4; # 8; # 16;
+
+# Cleaning parameters
+$TRIM_HOME = '/hpc/grid/omics_data02/apps/Trimmomatic-0.33';
+$TRIM_JAR = "$TRIM_HOME/trimmomatic-0.33.jar";
+$TRIM_EXE_STUB = "java -jar $TRIM_JAR";
+$TRIM_ADAPT_FA = "$TRIM_HOME/adapters/TruSeq3-PE.fa";
+@DEFAULT_STEP = ("ILLUMINACLIP:$TRIM_ADAPT_FA:2:30:10",
+		 'LEADING:3',
+		 'TRAILING:3',
+		 'SLIDINGWINDOW:4:15',
+		 'MINLEN:16',
+		 '',
+		 '');
+
+# Seqtk
+$SEQTK_NUM_SAMPLE = 200000;
+$SEQTK_SAMPLE_CMD = '/hpc/grid/shared/ngsapp/seqtk-master/seqtk';
+
+# BOWTIE
+$BOWTIE_ALIGN_SRC = '/hpc/grid/shared/ngsdb/ContaminationDetect/globin_rrna';
+$BOWTIE_CMD = "/hpc/grid/shared/ngsapp/bowtie2-2.2.4/bowtie2 --very-fast -p 1 -x $BOWTIE_ALIGN_SRC --no-unal --no-hd --no-sq";
+
+# contamination species
+%CONTAM_SPECIES_TOKENS = ( Globin => 'chrH',
+    Human_rRNA => 'primate|Human|Homo_sapiens|sapiens',
+    Animal => 'Animal|primate',
+    Bacteria => 'Bacteria',
+    Fungi => 'Fungi',
+    Plant => 'Plant',
+    Archaea => 'Archaea',
+    Protists => 'Protists');
+
+@CONTAM_SPECIES_ORDERED = qw(Globin Human_rRNA Animal Bacteria Fungi Plant Archea Protists);
+
+ # QC Report parameters
+$FASTQC_EXE = '/hpc/grid/omics_data02/apps/FastQC/fastqc';
+$QC_REPORT_ROOT_DIR = '/hpc/grid/scratch/tbi/fastqc_dev/reports'; #
+#'/afs/grid.pfizer.com/bioanalytic/nucacid/fastqc/reports';
+# '/hpc/grid/scratch/tbi/fastqc/reports'; # '/afs/bioanalytic/nucacid/fastqc';
+
+# URLs
+$QC_REPORT_ROOT_URL = 'http://biappsdev.pfizer.com/~ayyasa/fastqc_dev-reports';
+
+# Daemon 
+$PROCESSING = 1; # for debug; 0 = no processing will be done, only monitoring
+$WAIT_MINUTES = 60;
+# Styles
+$EMAIL_STYLE = << 'EOE';
+body {color:#153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px}
+EOE
+
+$BAD_CHARS = '[ \?\(\)\[\]\/\\=\+<>:;\"\',\*\^\|\&\.]'; 
+
+1;
+
