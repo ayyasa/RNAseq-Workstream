@@ -1,0 +1,26 @@
+Quick Start
+
+26 February 2014
+Andrew Hill
+
+Perform the following steps to check out and test the FastQC workflow code.  Start from a working directory $ROOT.  These steps assume you are using tcsh shell.  If using another shell, adjust the script config/fastqc_init.tcsh accordingly.
+
+Installation and run-time configuration steup:
+
+cd $ROOT
+svn export  https://pfizer.collab.net/svn/repos/fastqc/trunk/perl
+cd perl
+source config/fastqc_init.tcsh
+
+Then run the following scripts to confirm functionality and get started:
+
+The following should report a summary of system configuration variables:
+perl -c scripts/show_config.pl
+
+Simple unit tests are in the t/ subdirectory, and must be run from the main 'perl'
+directory.  For example:
+
+perl -c t/140_test_parseSampleSheet.t
+
+The main code modules are found in lib/Pfizer/FastQC.
+

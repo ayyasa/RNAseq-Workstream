@@ -1,0 +1,59 @@
+13 April 2015
+
+README for fastqc workflow
+================
+
+Creating the SampleSheet.csv
+
+To control the FASTQC workflow, insert the following fields into your SampleSheet.csv.
+
+All of the following must be inserted into the [Header] section of the file.
+
+EMAIL : enter your full email address (e.g. first.last@pfizer.com).  Status messages will go to this email.
+
+If no email is entered, status messages for your run will go to the system administrator.
+
+DOREADCLEANING : enter either 'Trimmomatic' or 'None'
+
+If no selection is made for DOREADCLEANING, 'None' will be assumed.
+
+If you select 'Trimmomatic', you may optionally enter the following 7 Trimmomatic parameters:
+
+TRIM_STEP01
+TRIM_STEP02
+TRIM_STEP03
+TRIM_STEP04
+TRIM_STEP05
+TRIM_STEP06
+TRIM_STEP07
+
+For any of those 7 Trimmomatic parameters that are not specified, defaults will be used as follows:
+
+TRIM_STEP01: ILLUMINACLIP:TruSeq3-PE.fa:2:30:10
+TRIM_STEP02: LEADING:3
+TRIM_STEP03: TRAILING:3
+TRIM_STEP04: SLIDINGWINDOW:4:15
+TRIM_STEP05: MINLEN:16
+TRIM_STEP06: <empty>
+TRIM_STEP07: <empty>
+
+An example set of entries is shown in Appendix 1 below.
+
+
+
+
+Appendix 1
+======
+
+Example workflow parameter entry lines, in CSV format:
+
+EMAIL, andrew.hill@pfizer.com
+DOREADCLEANING, None
+TRIM_STEP01, ILLUMINACLIP:/hpc/grid/omics_data02/apps/Trimmomatic-0.33/adaptors/TruSeq3-PE.fa:2:30:10
+TRIM_STEP02, LEADING:3
+TRIM_STEP03, TRAILING:3
+TRIM_STEP04, SLIDINGWINDOW:4:15
+TRIM_STEP05, MINLEN:16
+TRIM_STEP06, 
+TRIM_STEP07, 
+
