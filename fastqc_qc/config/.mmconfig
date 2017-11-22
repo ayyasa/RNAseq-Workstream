@@ -4,9 +4,9 @@
 $VERBOSE = 2;
 $LOG_FH = \*STDOUT;
 $FQ_R_CMD = 'R';
-$FQ_LOGDIR = '/hpc/grid/scratch/tbi/fastqc_dev/logs'; #'/hpc/grid/scratch/tbi/fastqc/logs';
+$FQ_LOGDIR = '/hpc/grid/scratch/ayyasa/logs'; #'/hpc/grid/scratch/tbi/fastqc/logs';
 @FQ_BCL_ROOT_DIRS = (
-    '/hpc/grid/scratch/tbi/fastqc_dev/raw'
+    '/hpc/grid/scratch/ayyasa/raw'
     #'/hpc/grid/wip_cmg_systems-immunology/Molecular_Profiling/NextSeq500_bcl_folder', # PTx NextSeq500
     #'/hpc/grid/wip_cmg_systems-immunology/Molecular_Profiling/MiniSeq' # PTx MinSeq
 );
@@ -58,9 +58,10 @@ $LSF_DEFAULT_QUEUE = 'general';
 $BSUB_HOST_SELECT = "";
 # -m 'amrndhl1295.pfizer.com amrndhl1296.pfizer.com amrndhl1292.pfizer.com amrndhl1228.pfizer.com amrndhl1159.pfizer.com amrndhl1158.pfizer.com amrndhl1157.pfizer.com amrndhl1156.pfizer.com'";
 $BSUB_CMD = "bsub $BSUB_HOST_SELECT -app large -q $LSF_DEFAULT_QUEUE";
-$RAW_FASTQ_FILE_DIR = '/hpc/grid/scratch/tbi/fastqc_dev/raw';#'/hpc/grid/scratch/tbi/fastqc/raw';
-$CLEAN_FASTQ_FILE_DIR = '/hpc/grid/scratch/tbi/fastqc_dev/clean';
-$FQ_TMPDIR = '/hpc/grid/scratch/tbi/fastqc_dev/temp';
+
+$RAW_FASTQ_FILE_DIR = '/hpc/grid/scratch/ayyasa/raw';#'/hpc/grid/scratch/tbi/fastqc/raw';
+$CLEAN_FASTQ_FILE_DIR = '/hpc/grid/scratch/ayyasa/clean';
+$FQ_TMPDIR = '/hpc/grid/scratch/ayyasa/temp';
 
 # BCL-related parameters
 $BCL_NUM_READS = 2;
@@ -109,12 +110,15 @@ $BOWTIE_CMD = "/hpc/grid/shared/ngsapp/bowtie2-2.2.4/bowtie2 --very-fast -p 1 -x
 
  # QC Report parameters
 $FASTQC_EXE = '/hpc/grid/omics_data02/apps/FastQC/fastqc';
-$QC_REPORT_ROOT_DIR = '/hpc/grid/scratch/tbi/fastqc_dev/reports'; #
+$QC_REPORT_ROOT_DIR = '/hpc/grid/scratch/ayyasa/reports'; #
 #'/afs/grid.pfizer.com/bioanalytic/nucacid/fastqc/reports';
 # '/hpc/grid/scratch/tbi/fastqc/reports'; # '/afs/bioanalytic/nucacid/fastqc';
 
 # URLs
-$QC_REPORT_ROOT_URL = 'http://biappsdev.pfizer.com/~ayyasa/fastqc_dev-reports';
+$QC_REPORT_ROOT_URL = 'http://biappsdev.pfizer.com/~ayyasa/fastqc-reports';
+$MULTIQC_REPORT_ROOT_URL = 'http://biappsdev.pfizer.com/~ayyasa/multiqc-reports';
+
+$MULTIQC_CONFIG_PATH = '/home/ayyasa/.conda/envs/test-multiqc/.multiqc_config.yaml';
 
 # Daemon 
 $PROCESSING = 1; # for debug; 0 = no processing will be done, only monitoring

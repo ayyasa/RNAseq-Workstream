@@ -1,10 +1,12 @@
 # FASTQC configuration
 setenv FQ_DEV_ROOT `pwd`/lib
 setenv FQ_CONFIG `pwd`/config
-setenv PROT_SID 'amrndhl759.pfizer.com:1542/laked.pfizer.com'
-setenv PROT_USER RNASEQ_OWNER
-setenv MM_DB_DRIVER '::Oracle'
-setenv PROT_PASS 'rnaseqd1'
+#setenv PROT_SID 'amrndhl759.pfizer.com:1542/laked.pfizer.com'
+setenv PROT_SID /home/ayyasa/geatd_dev
+setenv PROT_USER 'SRVGBL-FASTQC'
+setenv MM_DB_DRIVER '::Sqlite'
+#Oracle'
+setenv PROT_PASS ''
 
 #set PATH for PERL executable that contains needed dependencies
 #setenv PATH /afs/grid.pfizer.com/apps/Linux-x86_64/shared/perl/5.14.1/bin:${PATH}

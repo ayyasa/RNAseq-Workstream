@@ -296,6 +296,13 @@ sub run {
     my $input_dir = dirname($fastqc_dirs[0]);
     print "multiqc input dir is $input_dir\n";
 
+    my $report_name = basename($input_dir);
+
+    my $multiqc_cmd = "multiqc -f $input_dir/* -c $Pfizer::FastQC::Config::MULTIQC_CONFIG_PATH -n $report_name  -o /hpc/grid/scratch/ayyasa/";
+    print "multiqc cmd : $multiqc_cmd\n";
+    system($multiqc_cmd);
+
+
     # Update the status of the QC report
     $self->set_update_status('PAS');
     $self->sendCompleteMessage;
@@ -387,11 +394,21 @@ sub startMessage {
 sub url {
     my $self = shift;
     my $url = join("/", $self->path, $self->id) . '.html';
-    # print "url = '$url'\n";
+    print "qc url = '$url'\n";
     $url =~ s/$Pfizer::FastQC::Config::QC_REPORT_ROOT_DIR/$Pfizer::FastQC::Config::QC_REPORT_ROOT_URL/;
-    # print "url after = '$url'\n";
+    print "qc url after = '$url'\n";
     $url;
 }
+
+sub multiqc_url {
+   my $self = shift;
+   my $url = $self->path . '.html';
+   print "multiqc url = $url \n";
+   $url =~s/$Pfizer::FastQC::Config::QC_REPORT_ROOT_DIR/$Pfizer::FastQC::Config::MULTIQC_REPORT_ROOT_URL/;
+   print "multiqc url after subs = $url \n";
+   $url;	
+}
+
 
 sub sendCompleteMessage {
     my $self = shift;
@@ -413,6 +430,8 @@ sub completeMessage {
 		"</strong>.</p>" .
 		"<p>You can view your report <strong><a href='" . $self->url . "'>here</a></strong>  (" . $self->url . ")" . 
 		".</p>" .
+                 "<p>You can view MultiQC report <strong><a href='" . $self->multiqc_url . "'>here</a></strong> (" . $self->multiqc_url .")" .
+                 ".</p>" . 
 		"<p>Note: Reports are best viewed in Google Chrome browser.</p><hr/>" . 
 		supportText(); 
      $msg .= "</body></html>";

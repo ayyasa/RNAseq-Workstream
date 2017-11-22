@@ -35,7 +35,7 @@ our $VERSION = '1.3.2';
 
 our @ISA = qw/Exporter/;
 our @EXPORT = qw/  $DEV $VERBOSE $DB_DRIVER $ORACLE_SID
-$LOG_FH show_config $SAMPLESHEET_FILE $BAD_CHARS $METADATA_FILE/;
+$LOG_FH show_config $SAMPLESHEET_FILE $BAD_CHARS $METADATA_FILE $MULTIQC_REPORT_ROOT_URL/;
 
 our @EXPORT_OK = qw//;
 
@@ -144,4 +144,6 @@ sub show_config {
     print join(": ", "SMTP Server", $SMTP_SERVER), "\n";
     print join(": ", "VERBOSE level", $VERBOSE), "\n";
     print join(": ", "Metadata Path", $METADATA_FILE), "\n";	
+    print join(": ", "MultiQC config path", $MULTIQC_CONFIG_PATH), "\n";
+    
 }
